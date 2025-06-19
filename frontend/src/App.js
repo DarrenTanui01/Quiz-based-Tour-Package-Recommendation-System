@@ -23,7 +23,7 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} /> {/* Login is now the landing page */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<TravelerDashboard />} />
@@ -31,6 +31,7 @@ function App() {
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/packages" element={<PackageList />} />
           <Route path="/packages/:id" element={<PackageDetail />} />
+          <Route path="/home" element={<Home />} /> {/* Home is now protected, see below */}
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />

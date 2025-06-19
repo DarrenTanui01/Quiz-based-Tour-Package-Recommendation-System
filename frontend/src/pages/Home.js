@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 function Home() {
+  const { traveler } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!traveler) {
+      navigate('/login');
+    }
+  }, [traveler, navigate]);
+
   return (
     <Container>
       <Typography variant="h3" gutterBottom>

@@ -2,8 +2,12 @@ import React from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import Feedback from './Feedback';
 
 function PackageDetail({ pkg, onBack }) {
+  // TODO: Replace with real traveler ID from authentication context or props
+  const currentTravelerId = 1;
+
   if (!pkg) {
     return (
       <Container>
@@ -52,6 +56,8 @@ function PackageDetail({ pkg, onBack }) {
       <Typography variant="body2" sx={{ mb: 1 }}>
         <strong>Accommodation Options:</strong> {pkg.accommodation}
       </Typography>
+      {/* Feedback section */}
+      <Feedback packageId={pkg.id} travelerId={currentTravelerId} />
     </Container>
   );
 }

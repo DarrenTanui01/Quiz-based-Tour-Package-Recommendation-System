@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
 import QuizQuestion from './QuizQuestion';
+import QuizResult from './QuizResult';
+import packages from '../data/packages';
+import PackageDetail from '../Packages/PackageDetail';
 
 const quizQuestions = [
   {
@@ -71,9 +77,56 @@ const quizQuestions = [
   }
 ];
 
+function scorePackage(pkg, answers) {
+  let score = 0;
+  if (
+    (answers[1] === "Wildlife & Safari Adventures" && pkg.persona === "Luxury Safari Enthusiast") ||
+    (answers[1] === "Beach Relaxation & Coastal Culture" && pkg.persona === "Budget Coastal Explorer") ||
+    (answers[1] === "Hiking & Scenic Landscapes" && pkg.persona === "Active Rift Valley") ||
+    (answers[1] === "Historical & Cultural Immersion" && pkg.persona === "Cultural Explorer & Community Enthusiast") ||
+    (answers[1] === "Urban Exploration & City Life" && pkg.persona === "Cultural Explorer & Community Enthusiast")
+  ) score++;
+
+  if (
+    (answers[2] === "A quick getaway (3-4 Days)" && pkg.duration.includes("4 Days")) ||
+    (answers[2] === "A standard vacation (5-7 Days)" && pkg.duration.includes("6 Nights")) ||
+    (answers[2] === "An extended exploration (8-10 Days)" && pkg.duration.includes("8 Days")) ||
+    (answers[2] === "A deep dive (11+ Days)" && pkg.duration.includes("11"))
+  ) score++;
+
+  if (answers[3] && Array.isArray(answers[3])) {
+    const acts = answers[3].join(" ");
+    if (acts.match(/Game Drives|Big Five/) && pkg.persona.includes("Wildlife")) score++;
+    if (acts.match(/Snorkeling|Beach/) && pkg.persona.includes("Coastal")) score++;
+    if (acts.match(/Hiking|Mountain/) && pkg.persona.includes("Rift Valley")) score++;
+    if (acts.match(/Maasai|Cultural|Historical|Museum|Gallery/) && pkg.persona.includes("Cultural")) score++;
+    if (acts.match(/Boat|Family|Kids/) && pkg.persona.includes("Family")) score++;
+    if (acts.match(/Walking|Conservation|Wilderness/) && pkg.persona.includes("Wilderness")) score++;
+  }
+
+  if (
+    (answers[4] && answers[4].includes("Below $1,000") && pkg.estimatedCost.includes("850")) ||
+    (answers[4] && answers[4].includes("Mid-Range") && pkg.estimatedCost.includes("1,200")) ||
+    (answers[4] && answers[4].includes("Luxury") && pkg.estimatedCost.includes("6,500")) ||
+    (answers[4] && answers[4].includes("Premium") && pkg.estimatedCost.includes("3,800"))
+  ) score++;
+
+  if (
+    (answers[5] && answers[5].includes("Luxury Safari Lodges") && pkg.accommodation.includes("Luxury Safari Lodge")) ||
+    (answers[5] && answers[5].includes("Boutique Hotels") && pkg.accommodation.includes("Boutique Hotel")) ||
+    (answers[5] && answers[5].includes("Beach Resorts") && pkg.accommodation.includes("Beachalets")) ||
+    (answers[5] && answers[5].includes("Budget-friendly Guesthouses") && pkg.accommodation.includes("Guesthouse"))
+  ) score++;
+
+  return score;
+}
+
 function Quiz() {
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState({});
+  const [showResults, setShowResults] = useState(false);
+  const [recommended, setRecommended] = useState([]);
+  const [detailPkg, setDetailPkg] = useState(null);
 
   const handleAnswer = (answer) => {
     setAnswers({ ...answers, [quizQuestions[current].id]: answer });
@@ -83,14 +136,40 @@ function Quiz() {
     if (current < quizQuestions.length - 1) {
       setCurrent(current + 1);
     } else {
-      // Submit or show results
-      alert("Quiz complete! Answers: " + JSON.stringify(answers, null, 2));
+      // Score and recommend packages
+      const scored = packages
+        .map(pkg => ({ ...pkg, score: scorePackage(pkg, answers) }))
+        .sort((a, b) => b.score - a.score);
+      const topScore = scored[0]?.score || 0;
+      setRecommended(scored.filter(pkg => pkg.score === topScore && topScore > 0));
+
+      // Show browser alert with quiz answers (or any message you want)
+      alert("Quiz complete! Your answers:\n" + JSON.stringify(answers, null, 2));
+
+      // Then show the dialog
+      setShowResults(true);
     }
   };
 
   const handleBack = () => {
-    if (current > 0) setCurrent(current - 1);
+    if (showResults) {
+      setShowResults(false);
+      setCurrent(0);
+    } else if (current > 0) {
+      setCurrent(current - 1);
+    }
   };
+
+  const handleCloseDialog = () => {
+    setShowResults(false);
+    setCurrent(0);
+    setAnswers({});
+    setRecommended([]);
+  };
+
+  if (detailPkg) {
+    return <PackageDetail pkg={detailPkg} onBack={() => setDetailPkg(null)} />;
+  }
 
   return (
     <Container>
@@ -103,13 +182,33 @@ function Quiz() {
         onChange={handleAnswer}
       />
       <div style={{ marginTop: 24 }}>
-        <Button onClick={handleBack} disabled={current === 0} sx={{ mr: 2 }}>
+        <Button onClick={handleBack} disabled={current === 0 && !showResults} sx={{ mr: 2 }}>
           Back
         </Button>
         <Button variant="contained" onClick={handleNext}>
           {current === quizQuestions.length - 1 ? "Finish" : "Next"}
         </Button>
       </div>
+      <Dialog
+        open={showResults}
+        onClose={handleCloseDialog}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>Quiz Results</DialogTitle>
+        <DialogContent>
+          <QuizResult
+            recommended={recommended}
+            onViewDetail={pkg => {
+              setDetailPkg(pkg);
+              setShowResults(false);
+            }}
+          />
+          <Button onClick={handleCloseDialog} sx={{ mt: 2 }}>
+            Close
+          </Button>
+        </DialogContent>
+      </Dialog>
     </Container>
   );
 }

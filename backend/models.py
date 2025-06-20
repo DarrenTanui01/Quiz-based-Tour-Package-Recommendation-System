@@ -16,7 +16,7 @@ class QuizQuestion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
     question_text = db.Column(db.Text)
-    question_type = db.Column(db.String(50))  # radio, checkbox, etc.
+    question_type = db.Column(db.String(50))  
 
 class Option(db.Model):
     id = db.Column(db.Integer, primary_key=True)

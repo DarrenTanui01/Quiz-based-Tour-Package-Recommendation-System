@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import api from '../api';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext'; // or '../../context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {

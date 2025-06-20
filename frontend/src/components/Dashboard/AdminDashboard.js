@@ -9,8 +9,11 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import Paper from '@mui/material/Paper';
 import api from '../../api';
+import { useTheme } from '@mui/material/styles';
 
 const ADMIN_CREDENTIALS = [
   { email: 'AdminDT@gmail.com', password: 'AdminDT' },
@@ -27,6 +30,7 @@ function AdminDashboard() {
   const [users, setUsers] = useState([]);
   const [feedbacks, setFeedbacks] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const theme = useTheme();
 
   // Admin login handler
   const handleAdminLogin = (e) => {
@@ -69,110 +73,135 @@ function AdminDashboard() {
 
   if (!isAdmin) {
     return (
-      <Container maxWidth="xs" sx={{ py: 4 }}>
-        <Typography variant="h4" gutterBottom align="center">
-          Admin Login
-        </Typography>
-        <form onSubmit={handleAdminLogin}>
-          <TextField
-            label="Admin Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            fullWidth
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            fullWidth
-            sx={{ mb: 2 }}
-          />
-          <Button type="submit" variant="contained" fullWidth>
-            Login as Admin
-          </Button>
-        </form>
-        {loginMsg && (
-          <Typography color="error" sx={{ mt: 2, textAlign: 'center' }}>
-            {loginMsg}
-          </Typography>
-        )}
+      <Container maxWidth="xs" sx={{ py: 6 }}>
+        <Card
+          sx={{
+            borderRadius: 4,
+            boxShadow: 6,
+            background: theme.palette.mode === 'dark'
+              ? 'linear-gradient(135deg, #232936 60%, #1976d2 100%)'
+              : 'linear-gradient(135deg, #fffbe7 60%, #ff9800 100%)',
+          }}
+        >
+          <CardContent>
+            <Typography variant="h4" gutterBottom align="center" sx={{ fontWeight: 700 }}>
+              Admin Login
+            </Typography>
+            <form onSubmit={handleAdminLogin}>
+              <TextField
+                label="Admin Email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                fullWidth
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                fullWidth
+                sx={{ mb: 2 }}
+              />
+              <Button type="submit" variant="contained" fullWidth sx={{ borderRadius: 3 }}>
+                Login as Admin
+              </Button>
+            </form>
+            {loginMsg && (
+              <Typography color="error" sx={{ mt: 2, textAlign: 'center' }}>
+                {loginMsg}
+              </Typography>
+            )}
+          </CardContent>
+        </Card>
       </Container>
     );
   }
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Admin Dashboard
-      </Typography>
-      <Button variant="outlined" color="secondary" onClick={handleAdminLogout} sx={{ mb: 3 }}>
-        Logout Admin
-      </Button>
-      <Typography variant="h6" sx={{ mt: 2 }}>
-        Users
-      </Typography>
-      <TableContainer component={Paper} sx={{ mb: 4 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>User ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Delete</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {users.map((u) => (
-              <TableRow key={u.id}>
-                <TableCell>{u.id}</TableCell>
-                <TableCell>{u.name}</TableCell>
-                <TableCell>{u.email}</TableCell>
-                <TableCell>
-                  <Button color="error" onClick={() => handleDeleteUser(u.id)}>
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Typography variant="h6" sx={{ mt: 2 }}>
-        Feedback
-      </Typography>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Feedback ID</TableCell>
-              <TableCell>User ID</TableCell>
-              <TableCell>Package ID</TableCell>
-              <TableCell>Rating</TableCell>
-              <TableCell>Comment</TableCell>
-              <TableCell>Delete</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {feedbacks.map((f) => (
-              <TableRow key={f.id}>
-                <TableCell>{f.id}</TableCell>
-                <TableCell>{f.traveler_id}</TableCell>
-                <TableCell>{f.package_id}</TableCell>
-                <TableCell>{f.rating}</TableCell>
-                <TableCell>{f.comment}</TableCell>
-                <TableCell>
-                  <Button color="error" onClick={() => handleDeleteFeedback(f.id)}>
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Card
+        sx={{
+          borderRadius: 4,
+          boxShadow: 6,
+          mb: 4,
+          background: theme.palette.mode === 'dark'
+            ? 'linear-gradient(135deg, #232936 60%, #1976d2 100%)'
+            : 'linear-gradient(135deg, #fffbe7 60%, #ff9800 100%)',
+        }}
+      >
+        <CardContent>
+          <Typography variant="h4" gutterBottom sx={{ fontWeight: 700 }}>
+            Admin Dashboard
+          </Typography>
+          <Button variant="outlined" color="secondary" onClick={handleAdminLogout} sx={{ mb: 3 }}>
+            Logout Admin
+          </Button>
+          <Typography variant="h6" sx={{ mt: 2 }}>
+            Users
+          </Typography>
+          <TableContainer component={Paper} sx={{ mb: 4, borderRadius: 3 }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>User ID</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell>Delete</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {users.map((u) => (
+                  <TableRow key={u.id}>
+                    <TableCell>{u.id}</TableCell>
+                    <TableCell>{u.name}</TableCell>
+                    <TableCell>{u.email}</TableCell>
+                    <TableCell>
+                      <Button color="error" onClick={() => handleDeleteUser(u.id)}>
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Typography variant="h6" sx={{ mt: 2 }}>
+            Feedback
+          </Typography>
+          <TableContainer component={Paper} sx={{ borderRadius: 3 }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Feedback ID</TableCell>
+                  <TableCell>User ID</TableCell>
+                  <TableCell>Package ID</TableCell>
+                  <TableCell>Rating</TableCell>
+                  <TableCell>Comment</TableCell>
+                  <TableCell>Delete</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {feedbacks.map((f) => (
+                  <TableRow key={f.id}>
+                    <TableCell>{f.id}</TableCell>
+                    <TableCell>{f.traveler_id}</TableCell>
+                    <TableCell>{f.package_id}</TableCell>
+                    <TableCell>{f.rating}</TableCell>
+                    <TableCell>{f.comment}</TableCell>
+                    <TableCell>
+                      <Button color="error" onClick={() => handleDeleteFeedback(f.id)}>
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </CardContent>
+      </Card>
     </Container>
   );
 }

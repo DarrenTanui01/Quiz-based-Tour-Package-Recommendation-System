@@ -5,10 +5,13 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import QuizQuestion from './QuizQuestion';
 import QuizResult from './QuizResult';
 import packages from '../data/packages';
 import PackageDetail from '../Packages/PackageDetail';
+import { useTheme } from '@mui/material/styles';
 
 const quizQuestions = [
   {
@@ -127,9 +130,10 @@ function Quiz() {
   const [showResults, setShowResults] = useState(false);
   const [recommended, setRecommended] = useState([]);
   const [detailPkg, setDetailPkg] = useState(null);
+  const theme = useTheme();
 
   const handleAnswer = (answer) => {
-    setAnswers({ ...answers, [quizQuestions[current].id]: answer });
+    setAnswers({ ...answers, [current + 1]: answer });
   };
 
   const handleNext = () => {
@@ -142,11 +146,7 @@ function Quiz() {
         .sort((a, b) => b.score - a.score);
       const topScore = scored[0]?.score || 0;
       setRecommended(scored.filter(pkg => pkg.score === topScore && topScore > 0));
-
-      // Show browser alert with quiz answers (or any message you want)
       alert("Quiz complete! Your answers:\n" + JSON.stringify(answers, null, 2));
-
-      // Then show the dialog
       setShowResults(true);
     }
   };
@@ -172,30 +172,61 @@ function Quiz() {
   }
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
-        Quiz
-      </Typography>
-      <QuizQuestion
-        question={quizQuestions[current]}
-        value={answers[quizQuestions[current].id] || (quizQuestions[current].type === "checkbox" ? [] : "")}
-        onChange={handleAnswer}
-      />
-      <div style={{ marginTop: 24 }}>
-        <Button onClick={handleBack} disabled={current === 0 && !showResults} sx={{ mr: 2 }}>
-          Back
-        </Button>
-        <Button variant="contained" onClick={handleNext}>
-          {current === quizQuestions.length - 1 ? "Finish" : "Next"}
-        </Button>
-      </div>
+    <Container maxWidth="sm" sx={{ py: { xs: 4, sm: 8 } }}>
+      <Card
+        sx={{
+          borderRadius: 4,
+          boxShadow: 6,
+          background: theme.palette.mode === 'dark'
+            ? 'linear-gradient(135deg, #232936 60%, #1976d2 100%)'
+            : 'linear-gradient(135deg, #fffbe7 60%, #ff9800 100%)',
+        }}
+      >
+        <CardContent>
+          <Typography
+            variant="h4"
+            gutterBottom
+            sx={{
+              fontWeight: 700,
+              fontSize: { xs: '2rem', sm: '2.5rem' },
+              textAlign: 'center',
+              color: theme.palette.mode === 'dark' ? '#fff' : '#232936'
+            }}
+          >
+            Quiz
+          </Typography>
+          <QuizQuestion
+            question={quizQuestions[current]}
+            value={answers[quizQuestions[current].id] || (quizQuestions[current].type === "checkbox" ? [] : "")}
+            onChange={handleAnswer}
+          />
+          <div style={{ marginTop: 24, display: 'flex', justifyContent: 'center' }}>
+            <Button onClick={handleBack} disabled={current === 0 && !showResults} sx={{ mr: 2 }}>
+              Back
+            </Button>
+            <Button variant="contained" onClick={handleNext}>
+              {current === quizQuestions.length - 1 ? "Finish" : "Next"}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
       <Dialog
         open={showResults}
         onClose={handleCloseDialog}
         maxWidth="md"
         fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 4,
+            background: theme.palette.mode === 'dark'
+              ? 'linear-gradient(135deg, #232936 60%, #1976d2 100%)'
+              : 'linear-gradient(135deg, #fffbe7 60%, #ff9800 100%)',
+          }
+        }}
       >
-        <DialogTitle>Quiz Results</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700, color: theme.palette.mode === 'dark' ? '#fff' : '#232936' }}>
+          Quiz Results
+        </DialogTitle>
         <DialogContent>
           <QuizResult
             recommended={recommended}

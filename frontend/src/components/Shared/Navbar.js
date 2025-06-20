@@ -18,6 +18,9 @@ import Tooltip from '@mui/material/Tooltip';
 import Stack from '@mui/material/Stack';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import { useThemeMode } from '../../context/ThemeContext';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 const navLinks = [
   { label: 'Home', to: '/home' },
@@ -31,6 +34,7 @@ function Navbar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { mode, toggleTheme } = useThemeMode();
 
   const handleLogout = () => {
     logout();
@@ -38,7 +42,7 @@ function Navbar() {
   };
 
   const drawer = (
-    <Box sx={{ width: 220 }} role="presentation" onClick={() => setDrawerOpen(false)}>
+    <Box sx={{ width: 240 }} role="presentation" onClick={() => setDrawerOpen(false)}>
       <List>
         {traveler &&
           navLinks.map(link => (
@@ -52,6 +56,12 @@ function Navbar() {
         <ListItem disablePadding>
           <ListItemButton component={Link} to="/admin">
             <ListItemText primary="Admin" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton onClick={toggleTheme}>
+            <ListItemText primary={mode === 'dark' ? 'Light Mode' : 'Dark Mode'} />
+            {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
           </ListItemButton>
         </ListItem>
         {traveler ? (
@@ -79,7 +89,9 @@ function Navbar() {
   );
 
   return (
-    <AppBar position="static" sx={{ background: 'linear-gradient(90deg, #1976d2 60%, #ff9800 100%)' }}>
+    <AppBar position="static" sx={{ background: theme.palette.mode === 'dark'
+      ? 'linear-gradient(90deg, #232936 60%, #1976d2 100%)'
+      : 'linear-gradient(90deg, #ff9800 60%, #1976d2 100%)' }}>
       <Toolbar>
         <Typography variant="h5" sx={{ flexGrow: 1, fontWeight: 700, letterSpacing: 2 }}>
           Tour Recommender
@@ -139,6 +151,9 @@ function Navbar() {
             >
               Admin
             </Button>
+            <IconButton sx={{ ml: 1 }} onClick={toggleTheme} color="inherit">
+              {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+            </IconButton>
             {traveler && (
               <Tooltip title={traveler.email}>
                 <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>

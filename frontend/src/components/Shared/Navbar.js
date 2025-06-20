@@ -22,8 +22,7 @@ import { useTheme } from '@mui/material/styles';
 const navLinks = [
   { label: 'Home', to: '/home' },
   { label: 'Quiz', to: '/quiz' },
-  { label: 'Packages', to: '/packages' },
-  { label: 'Admin', to: '/admin' }
+  { label: 'Packages', to: '/packages' }
 ];
 
 function Navbar() {
@@ -49,6 +48,12 @@ function Navbar() {
               </ListItemButton>
             </ListItem>
           ))}
+        {/* Always show Admin button */}
+        <ListItem disablePadding>
+          <ListItemButton component={Link} to="/admin">
+            <ListItemText primary="Admin" />
+          </ListItemButton>
+        </ListItem>
         {traveler ? (
           <ListItem disablePadding>
             <ListItemButton onClick={handleLogout}>
@@ -120,6 +125,20 @@ function Navbar() {
                   {link.label}
                 </Button>
               ))}
+            {/* Always show Admin button */}
+            <Button
+              color="inherit"
+              component={Link}
+              to="/admin"
+              sx={{
+                borderRadius: 3,
+                px: 3,
+                transition: 'all 0.3s',
+                '&:hover': { background: '#fff', color: '#1976d2', transform: 'scale(1.08)' }
+              }}
+            >
+              Admin
+            </Button>
             {traveler && (
               <Tooltip title={traveler.email}>
                 <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>

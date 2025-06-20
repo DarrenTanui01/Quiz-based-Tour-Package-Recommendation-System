@@ -48,3 +48,11 @@ def get_all_feedback():
             'timestamp': f.timestamp
         })
     return jsonify(result)
+
+# Delete feedback (for admin)
+@feedback_bp.route('/<int:feedback_id>', methods=['DELETE'])
+def delete_feedback(feedback_id):
+    fb = Feedback.query.get_or_404(feedback_id)
+    db.session.delete(fb)
+    db.session.commit()
+    return jsonify({'message': 'Feedback deleted'})

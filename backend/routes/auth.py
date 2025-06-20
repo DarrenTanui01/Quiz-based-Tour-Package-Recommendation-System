@@ -29,3 +29,20 @@ def login():
         access_token = create_access_token(identity=traveler.id)
         return jsonify({'access_token': access_token, 'traveler_id': traveler.id})
     return jsonify({'message': 'Invalid credentials'}), 401
+
+# List all users (for admin)
+@auth_bp.route('/users', methods=['GET'])
+def list_users():
+    users = Traveler.query.all()
+    return jsonify([
+        {'id': u.id, 'name': u.name, 'email': u.email}
+        for u in users
+    ])
+
+# Delete a user (for admin)
+@auth_bp.route('/users/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    user = Traveler.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify({'message': 'User deleted'})

@@ -9,7 +9,6 @@ import Footer from './components/Shared/Footer';
 import Home from './pages/Home';
 import Login from './components/Login';
 import Register from './components/Register';
-import TravelerDashboard from './components/Dashboard/TravelerDashboard';
 import AdminDashboard from './components/Dashboard/AdminDashboard';
 import Quiz from './components/Quiz/Quiz';
 import PackageList from './components/Packages/PackageList';
@@ -26,7 +25,6 @@ function App() {
           <Route path="/" element={<Login />} /> {/* Login is now the landing page */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<TravelerDashboard />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/packages" element={<PackageList />} />

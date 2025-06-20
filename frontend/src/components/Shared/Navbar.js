@@ -23,7 +23,6 @@ const navLinks = [
   { label: 'Home', to: '/home' },
   { label: 'Quiz', to: '/quiz' },
   { label: 'Packages', to: '/packages' },
-  { label: 'Dashboard', to: '/dashboard' },
   { label: 'Admin', to: '/admin' }
 ];
 

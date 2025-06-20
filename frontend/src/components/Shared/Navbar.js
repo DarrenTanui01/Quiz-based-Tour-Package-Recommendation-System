@@ -1,23 +1,78 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
 import Stack from '@mui/material/Stack';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
+const navLinks = [
+  { label: 'Home', to: '/home' },
+  { label: 'Quiz', to: '/quiz' },
+  { label: 'Packages', to: '/packages' },
+  { label: 'Dashboard', to: '/dashboard' },
+  { label: 'Admin', to: '/admin' }
+];
 
 function Navbar() {
   const { traveler, logout } = useAuth();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
+
+  const drawer = (
+    <Box sx={{ width: 220 }} role="presentation" onClick={() => setDrawerOpen(false)}>
+      <List>
+        {traveler &&
+          navLinks.map(link => (
+            <ListItem key={link.label} disablePadding>
+              <ListItemButton component={Link} to={link.to}>
+                <ListItemText primary={link.label} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        {traveler ? (
+          <ListItem disablePadding>
+            <ListItemButton onClick={handleLogout}>
+              <ListItemText primary="Logout" />
+            </ListItemButton>
+          </ListItem>
+        ) : (
+          <>
+            <ListItem disablePadding>
+              <ListItemButton component={Link} to="/login">
+                <ListItemText primary="Login" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component={Link} to="/register">
+                <ListItemText primary="Register" />
+              </ListItemButton>
+            </ListItem>
+          </>
+        )}
+      </List>
+    </Box>
+  );
 
   return (
     <AppBar position="static" sx={{ background: 'linear-gradient(90deg, #1976d2 60%, #ff9800 100%)' }}>
@@ -25,74 +80,48 @@ function Navbar() {
         <Typography variant="h5" sx={{ flexGrow: 1, fontWeight: 700, letterSpacing: 2 }}>
           Tour Recommender
         </Typography>
-        <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-          {traveler && (
-            <>
-              <Button
-                color="inherit"
-                component={Link}
-                to="/home"
-                sx={{
-                  borderRadius: 3,
-                  px: 3,
-                  transition: 'all 0.3s',
-                  '&:hover': { background: '#fff', color: '#1976d2', transform: 'scale(1.08)' }
-                }}
-              >
-                Home
-              </Button>
-              <Button
-                color="inherit"
-                component={Link}
-                to="/quiz"
-                sx={{
-                  borderRadius: 3,
-                  px: 3,
-                  transition: 'all 0.3s',
-                  '&:hover': { background: '#fff', color: '#1976d2', transform: 'scale(1.08)' }
-                }}
-              >
-                Quiz
-              </Button>
-              <Button
-                color="inherit"
-                component={Link}
-                to="/packages"
-                sx={{
-                  borderRadius: 3,
-                  px: 3,
-                  transition: 'all 0.3s',
-                  '&:hover': { background: '#fff', color: '#1976d2', transform: 'scale(1.08)' }
-                }}
-              >
-                Packages
-              </Button>
-              <Button
-                color="inherit"
-                component={Link}
-                to="/dashboard"
-                sx={{
-                  borderRadius: 3,
-                  px: 3,
-                  transition: 'all 0.3s',
-                  '&:hover': { background: '#fff', color: '#1976d2', transform: 'scale(1.08)' }
-                }}
-              >
-                Dashboard
-              </Button>
-              <Button
-                color="inherit"
-                component={Link}
-                to="/admin"
-                sx={{
-                  borderRadius: 3,
-                  px: 3,
-                  transition: 'all 0.3s',
-                  '&:hover': { background: '#fff', color: '#1976d2', transform: 'scale(1.08)' }
-                }}
-              >
-                Admin
-              </Button>
+        {isMobile ? (
+          <>
+            {traveler && (
+              <Tooltip title={traveler.email}>
+                <Avatar sx={{ bgcolor: '#fff', color: '#1976d2', mr: 1 }}>
+                  {traveler.email[0]?.toUpperCase() || '?'}
+                </Avatar>
+              </Tooltip>
+            )}
+            <IconButton
+              color="inherit"
+              edge="end"
+              onClick={() => setDrawerOpen(true)}
+              sx={{ ml: 1 }}
+              aria-label="menu"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+              {drawer}
+            </Drawer>
+          </>
+        ) : (
+          <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+            {traveler &&
+              navLinks.map(link => (
+                <Button
+                  key={link.label}
+                  color="inherit"
+                  component={Link}
+                  to={link.to}
+                  sx={{
+                    borderRadius: 3,
+                    px: 3,
+                    transition: 'all 0.3s',
+                    '&:hover': { background: '#fff', color: '#1976d2', transform: 'scale(1.08)' }
+                  }}
+                >
+                  {link.label}
+                </Button>
+              ))}
+            {traveler && (
               <Tooltip title={traveler.email}>
                 <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
                   <Avatar sx={{ bgcolor: '#fff', color: '#1976d2', mr: 1 }}>
@@ -105,13 +134,16 @@ function Navbar() {
                       color: '#fff',
                       textShadow: '0 1px 2px #0008',
                       mr: 2,
-                      letterSpacing: 1
+                      letterSpacing: 1,
+                      display: { xs: 'none', lg: 'block' }
                     }}
                   >
                     {traveler.email}
                   </Typography>
                 </Box>
               </Tooltip>
+            )}
+            {traveler ? (
               <Button
                 color="secondary"
                 variant="contained"
@@ -127,39 +159,38 @@ function Navbar() {
               >
                 Logout
               </Button>
-            </>
-          )}
-          {!traveler && (
-            <>
-              <Button
-                color="inherit"
-                component={Link}
-                to="/login"
-                sx={{
-                  borderRadius: 3,
-                  px: 3,
-                  transition: 'all 0.3s',
-                  '&:hover': { background: '#fff', color: '#1976d2', transform: 'scale(1.08)' }
-                }}
-              >
-                Login
-              </Button>
-              <Button
-                color="inherit"
-                component={Link}
-                to="/register"
-                sx={{
-                  borderRadius: 3,
-                  px: 3,
-                  transition: 'all 0.3s',
-                  '&:hover': { background: '#fff', color: '#1976d2', transform: 'scale(1.08)' }
-                }}
-              >
-                Register
-              </Button>
-            </>
-          )}
-        </Stack>
+            ) : (
+              <>
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/login"
+                  sx={{
+                    borderRadius: 3,
+                    px: 3,
+                    transition: 'all 0.3s',
+                    '&:hover': { background: '#fff', color: '#1976d2', transform: 'scale(1.08)' }
+                  }}
+                >
+                  Login
+                </Button>
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/register"
+                  sx={{
+                    borderRadius: 3,
+                    px: 3,
+                    transition: 'all 0.3s',
+                    '&:hover': { background: '#fff', color: '#1976d2', transform: 'scale(1.08)' }
+                  }}
+                >
+                  Register
+                </Button>
+              </>
+            )}
+          </Stack>
+        )}
       </Toolbar>
     </AppBar>
   );

@@ -10,6 +10,7 @@ import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 
+
 function Register() {
   const { login } = useAuth();
   const [name, setName] = useState('');
@@ -88,7 +89,13 @@ function Register() {
           </form>
           {msg && <Typography sx={{ mt: 2, textAlign: 'center', color: 'error.main' }}>{msg}</Typography>}
           <Typography sx={{ mt: 2, textAlign: 'center' }}>
-            Already have an account? <Link to="/login">Login now</Link>
+            Already have an account?{' '}
+            <Link
+              to="/login"
+              style={{ color: theme.palette.primary.main, textDecoration: 'underline', fontWeight: 600 }}
+            >
+              Login now
+            </Link>
           </Typography>
         </CardContent>
       </Card>

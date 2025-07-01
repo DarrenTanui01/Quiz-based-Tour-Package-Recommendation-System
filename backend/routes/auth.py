@@ -30,8 +30,8 @@ def login():
         return jsonify({
             'access_token': access_token,
             'traveler_id': traveler.id,
-            'name': traveler.name,  # Add this line
-            'email': traveler.email # Add this line for completeness
+            'name': traveler.name,  
+            'email': traveler.email 
         })
     return jsonify({'message': 'Invalid credentials'}), 401
 

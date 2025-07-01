@@ -6,13 +6,11 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import api from '../api';
-import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 
 
 function Register() {
-  const { login } = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,11 +23,8 @@ function Register() {
     setMsg('');
     try {
       await api.post('/auth/register', { name, email, password });
-      // Auto-login after registration
-      const res = await api.post('/auth/login', { email, password });
-      login({ id: res.data.traveler_id, email }, res.data.access_token);
-      setMsg('Registration successful!');
-      navigate('/home');
+      setMsg('Registration successful! Please log in.');
+      navigate('/login');
     } catch (err) {
       setMsg('Registration failed');
     }

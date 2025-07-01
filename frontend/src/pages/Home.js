@@ -41,7 +41,7 @@ function Home() {
               color: theme.palette.mode === 'dark' ? '#fff' : '#232936'
             }}
           >
-            Welcome!
+            {`Welcome${traveler && traveler.name ? ', ' + traveler.name + '!' : '!'}`}
           </Typography>
           <Typography
             variant="h6"

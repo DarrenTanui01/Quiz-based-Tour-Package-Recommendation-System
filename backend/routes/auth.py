@@ -27,7 +27,12 @@ def login():
     traveler = Traveler.query.filter_by(email=data['email']).first()
     if traveler and bcrypt.check_password_hash(traveler.password_hash, data['password']):
         access_token = create_access_token(identity=traveler.id)
-        return jsonify({'access_token': access_token, 'traveler_id': traveler.id})
+        return jsonify({
+            'access_token': access_token,
+            'traveler_id': traveler.id,
+            'name': traveler.name,  # Add this line
+            'email': traveler.email # Add this line for completeness
+        })
     return jsonify({'message': 'Invalid credentials'}), 401
 
 # List all users (for admin)

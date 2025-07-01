@@ -24,7 +24,10 @@ function Login() {
     setMsg('');
     try {
       const res = await api.post('/auth/login', { email, password });
-      login({ id: res.data.traveler_id, email }, res.data.access_token);
+      login(
+        { id: res.data.traveler_id, name: res.data.name, email: res.data.email },
+        res.data.access_token
+      );
       setMsg('Login successful!');
       navigate('/home');
     } catch (err) {

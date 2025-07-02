@@ -9,8 +9,11 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
+import { useTheme } from '@mui/material/styles';
 
 function QuizQuestion({ question, value, onChange }) {
+  const theme = useTheme();
+
   const handleRadioChange = (event) => {
     onChange(event.target.value);
   };
@@ -25,7 +28,13 @@ function QuizQuestion({ question, value, onChange }) {
   };
 
   return (
-    <Card sx={{ marginBottom: 2 }}>
+    <Card sx={{
+      marginBottom: 2,
+      background: theme.palette.mode === 'dark'
+              ? 'linear-gradient(135deg, #232936 60%, #1976d2 100%)'
+              : 'linear-gradient(135deg, #fffbe7 60%, #ff9800 100%)',
+            opacity: 0.97,
+    }}>
       <CardContent>
         <Typography variant="h6">{question.title}</Typography>
         <Typography sx={{ mb: 2 }}>{question.questionText}</Typography>

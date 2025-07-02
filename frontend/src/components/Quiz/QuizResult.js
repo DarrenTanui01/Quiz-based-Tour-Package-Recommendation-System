@@ -27,8 +27,9 @@ function QuizResult({ recommended, onViewDetail }) {
               borderRadius: 3,
               boxShadow: 4,
               background: theme.palette.mode === 'dark'
-                ? 'linear-gradient(135deg, #232936 60%, #1976d2 100%)'
-                : 'linear-gradient(135deg, #fffbe7 60%, #ff9800 100%)',
+              ? 'linear-gradient(135deg, #232936 60%, #1976d2 100%)'
+              : 'linear-gradient(135deg, #fffbe7 60%, #ff9800 100%)',
+            opacity: 0.97, 
             }}
           >
             <CardContent>
@@ -42,7 +43,7 @@ function QuizResult({ recommended, onViewDetail }) {
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 Duration: {pkg.duration} | Price: {pkg.estimatedCost}
               </Typography>
-              <Button variant="outlined" sx={{ mt: 2 }} onClick={() => onViewDetail(pkg)}>
+              <Button variant="outlined" sx={{ mt: 2 }} color="primary" onClick={() => onViewDetail(pkg)}>
                 View Details
               </Button>
             </CardContent>

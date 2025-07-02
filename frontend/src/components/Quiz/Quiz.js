@@ -12,6 +12,7 @@ import QuizResult from './QuizResult';
 import packages from '../data/packages';
 import PackageDetail from '../Packages/PackageDetail';
 import { useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
 
 const quizQuestions = [
   {
@@ -168,48 +169,71 @@ function Quiz() {
   };
 
   if (detailPkg) {
-    return <PackageDetail pkg={detailPkg} onBack={() => setDetailPkg(null)} />;
+
+    return (
+      <PackageDetail
+        pkg={detailPkg}
+        onBack={() => setDetailPkg(null)}
+      />
+    );
   }
 
   return (
-    <Container maxWidth="sm" sx={{ py: { xs: 4, sm: 8 } }}>
-      <Card
-        sx={{
-          borderRadius: 4,
-          boxShadow: 6,
-          background: theme.palette.mode === 'dark'
-            ? 'linear-gradient(135deg, #232936 60%, #1976d2 100%)'
-            : 'linear-gradient(135deg, #fffbe7 60%, #ff9800 100%)',
-        }}
-      >
-        <CardContent>
-          <Typography
-            variant="h4"
-            gutterBottom
-            sx={{
-              fontWeight: 700,
-              fontSize: { xs: '2rem', sm: '2.5rem' },
-              textAlign: 'center',
-              color: theme.palette.mode === 'dark' ? '#fff' : '#232936'
-            }}
-          >
-            Quiz
-          </Typography>
-          <QuizQuestion
-            question={quizQuestions[current]}
-            value={answers[quizQuestions[current].id] || (quizQuestions[current].type === "checkbox" ? [] : "")}
-            onChange={handleAnswer}
-          />
-          <div style={{ marginTop: 24, display: 'flex', justifyContent: 'center' }}>
-            <Button onClick={handleBack} disabled={current === 0 && !showResults} sx={{ mr: 2 }}>
-              Back
-            </Button>
-            <Button variant="contained" onClick={handleNext}>
-              {current === quizQuestions.length - 1 ? "Finish" : "Next"}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        pt: { xs: 8, sm: 10 },
+        pb: { xs: 8, sm: 10 },
+        background: theme.palette.mode === 'dark'
+          ? '#181c24'
+          : '#f5f5f5',
+      }}
+    >
+      <Container maxWidth="sm" sx={{ py: { xs: 4, sm: 8 }, zIndex: 1 }}>
+        <Card
+          sx={{
+            borderRadius: 4,
+            boxShadow: 6,
+            background: theme.palette.mode === 'dark'
+              ? 'linear-gradient(135deg, #232936 60%, #1976d2 100%)'
+              : 'linear-gradient(135deg, #fffbe7 60%, #ff9800 100%)',
+            opacity: 0.97,
+          }}
+        >
+          <CardContent>
+            <Typography
+              variant="h4"
+              gutterBottom
+              sx={{
+                fontWeight: 700,
+                fontSize: { xs: '2rem', sm: '2.5rem' },
+                textAlign: 'center',
+                color: theme.palette.mode === 'dark' ? '#fff' : '#232936',
+                textShadow: '0 2px 8px rgba(0,0,0,0.4)'
+              }}
+            >
+              Quiz
+            </Typography>
+            <QuizQuestion
+              question={quizQuestions[current]}
+              value={answers[quizQuestions[current].id] || (quizQuestions[current].type === "checkbox" ? [] : "")}
+              onChange={handleAnswer}
+            />
+            <div style={{ marginTop: 24, display: 'flex', justifyContent: 'center' }}>
+              <Button onClick={handleBack} disabled={current === 0 && !showResults} sx={{ mr: 2 }}>
+                Back
+              </Button>
+              <Button variant="contained" onClick={handleNext}>
+                {current === quizQuestions.length - 1 ? "Finish" : "Next"}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </Container>
       <Dialog
         open={showResults}
         onClose={handleCloseDialog}
@@ -232,7 +256,7 @@ function Quiz() {
             recommended={recommended}
             onViewDetail={pkg => {
               setDetailPkg(pkg);
-              setShowResults(false);
+              // Do NOT setShowResults(false)
             }}
           />
           <Button onClick={handleCloseDialog} sx={{ mt: 2 }}>
@@ -240,7 +264,7 @@ function Quiz() {
           </Button>
         </DialogContent>
       </Dialog>
-    </Container>
+    </Box>
   );
 }
 

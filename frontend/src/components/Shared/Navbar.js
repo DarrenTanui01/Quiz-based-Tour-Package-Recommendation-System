@@ -91,7 +91,7 @@ function Navbar() {
   return (
     <AppBar position="static" sx={{ background: theme.palette.mode === 'dark'
       ? 'linear-gradient(90deg, #232936 60%, #1976d2 100%)'
-      : 'linear-gradient(90deg, #ff9800 60%, #1976d2 100%)' }}>
+      : 'linear-gradient(90deg, #b0b4ba 60%, #1976d2 100%)' }}>
       <Toolbar>
         <Typography variant="h5" sx={{ flexGrow: 1, fontWeight: 700, letterSpacing: 2 }}>
           Tour Recommender

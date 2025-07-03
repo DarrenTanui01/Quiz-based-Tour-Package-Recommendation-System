@@ -90,7 +90,7 @@ function Home() {
         </Box>
       )}
 
-      <Container maxWidth="sm" sx={{ py: { xs: 4, sm: 8 }, zIndex: 1 }}>
+      <Container maxWidth="md" sx={{ py: { xs: 4, sm: 8 }, zIndex: 1 }}>
         <Card
           sx={{
             borderRadius: 4,
@@ -98,9 +98,18 @@ function Home() {
             background: theme.palette.mode === 'dark'
               ? 'linear-gradient(135deg, #232936 60%, #1976d2 100%)'
               : 'linear-gradient(135deg, #b0b4ba 60%, #1976d2 100%)',
+            minWidth: { xs: 320, sm: 600, md: 900 }, 
+            minHeight: { xs: 180, sm: 200, md: 220 },  
+            width: { xs: '95vw', sm: '90vw', md: '75vw' }, 
+            mx: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            mb: 4,
           }}
         >
-          <CardContent>
+          <CardContent sx={{ width: '100%' }}>
             <Typography
               variant="h3"
               gutterBottom

@@ -43,7 +43,7 @@ function Login() {
         width: '100vw',
         position: 'relative',
         overflow: 'hidden',
-        background: `linear-gradient(rgba(30,30,30,0.2), rgba(30,30,30,0.2)), url('/images/rhino.jpg') center/cover no-repeat fixed`,
+        background: `linear-gradient(rgba(30,30,30,0.15), rgba(30,30,30,0.15)), url('/images/sunset safari.jpg') center/cover no-repeat fixed`,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

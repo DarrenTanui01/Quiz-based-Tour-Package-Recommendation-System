@@ -25,8 +25,11 @@ const galleryImages = [
   'Balloon-Safari-1.jpg',
   'Lake-Nakuru-National-Park.jpg',
   'manyata.jpg', 
-  'Ol-Pejeta-Rhinos.jpg', 
-  'safari van.jpg'
+  'Ol-Pejeta-Rhinos.jpg',
+  'Nairobi Skyline.jpg',
+  'infinity-pool.jpg',
+  'Wildbeast.jpg',
+  'Lake-Naivasha_Hero-Banner_IIpng.png'
 ];
 
 function Home() {

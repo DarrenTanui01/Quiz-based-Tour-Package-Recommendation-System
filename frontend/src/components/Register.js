@@ -37,7 +37,7 @@ function Register() {
         width: '100vw',
         position: 'relative',
         overflow: 'hidden',
-        background: `linear-gradient(rgba(30,30,30,0.2), rgba(30,30,30,0.2)), url('/images/Wasini home.jpg') center/cover no-repeat fixed`,
+        background: `linear-gradient(rgba(30,30,30,0.2), rgba(30,30,30,0.2)), url('/images/Lake-Naivasha_Hero-Banner_IIpng.png') center/cover no-repeat fixed`,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

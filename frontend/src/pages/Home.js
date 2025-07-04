@@ -23,6 +23,10 @@ const galleryImages = [
   'Wasini home.jpg',
   'scenary.jpg',
   'Balloon-Safari-1.jpg',
+  'Lake-Nakuru-National-Park.jpg',
+  'manyata.jpg', 
+  'Ol-Pejeta-Rhinos.jpg', 
+  'safari van.jpg'
 ];
 
 function Home() {

@@ -45,7 +45,10 @@ function Home() {
   }, [traveler, navigate]);
 
   return (
-    <Box sx={{ position: 'relative', minHeight: '100vh', pb: 6 }}>
+    <Box sx={{ position: 'relative', minHeight: '100vh', pb: 6, background: theme.palette.mode === 'light'
+      ? 'linear-gradient(90deg,rgba(1, 77, 134, 0.77) 30%,rgb(251, 248, 248) 100%)'
+      : 'inherit',
+    transition: 'background 0.5s', }}>
       {/* Blur overlay when popup is open */}
       {popupImg && (
         <Box

@@ -13,7 +13,17 @@ function PackageList() {
   const theme = useTheme();
 
   return (
-    <Container maxWidth="md" sx={{ py: { xs: 4, sm: 8 } }}>
+    <Container
+      maxWidth="md"
+      sx={{
+        py: { xs: 4, sm: 8 },
+        background: theme.palette.mode === 'light'
+          ? 'linear-gradient(90deg, #fffbe7 80%,rgba(254, 157, 0, 0.82) 50%)'
+          : 'inherit',
+        minHeight: '100vh',
+        transition: 'background 0.5s',
+      }}
+    >
       <Typography
         variant="h4"
         gutterBottom

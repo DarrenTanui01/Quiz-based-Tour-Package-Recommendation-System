@@ -32,9 +32,9 @@ const galleryImages = [
   'Lake-Naivasha_Hero-Banner_IIpng.png',
   'Samburu-National-Park.jpg',
   'Mt Kenya.jpg',
-  'Mount-Longonot.jpg',
   'Thomson falls1.jpg',
   'thomson falls2.jpeg',
+  'Mount-Longonot.jpg',
   'Leopard.jpg',
   'Lion.jpg',
 ];

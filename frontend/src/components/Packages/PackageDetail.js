@@ -24,7 +24,17 @@ function PackageDetail({ pkg, onBack }) {
   }
 
   return (
-    <Container maxWidth="md" sx={{ py: { xs: 4, sm: 8 } }}>
+    <Container
+      maxWidth="md"
+      sx={{
+        py: { xs: 4, sm: 8 },
+        background: theme.palette.mode === 'light'
+          ? 'linear-gradient(90deg, #fffbe7 80%,rgb(252, 156, 3) 50%)'
+          : 'inherit',
+        minHeight: '100vh',
+        transition: 'background 0.5s',
+      }}
+    >
       <Card
         sx={{
           borderRadius: 4,

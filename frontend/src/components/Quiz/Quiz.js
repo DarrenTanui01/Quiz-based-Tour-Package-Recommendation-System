@@ -183,14 +183,15 @@ function Quiz() {
       sx={{
         minHeight: '100vh',
         position: 'relative',
+        background: theme.palette.mode === 'light'
+          ? 'linear-gradient(135deg, #fffbe7 20%,rgb(248, 155, 6) 100%)'
+          : theme.palette.background.default,
+        transition: 'background 0.5s',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         pt: { xs: 8, sm: 10 },
         pb: { xs: 8, sm: 10 },
-        background: theme.palette.mode === 'dark'
-          ? '#181c24'
-          : '#f5f5f5',
       }}
     >
       <Container maxWidth="sm" sx={{ py: { xs: 4, sm: 8 }, zIndex: 1 }}>

@@ -12,7 +12,7 @@ import Box from '@mui/material/Box';
 
 const galleryImages = [
   'cheetar.jpg',
-  'diani beach.jpg',
+  'Balloon-Safari-1.jpg',
   'Diani boat.jpg',
   'elephant.jpg',
   'safari van.jpg',
@@ -22,7 +22,6 @@ const galleryImages = [
   'rhino.jpg',
   'Wasini home.jpg',
   'scenary.jpg',
-  'Balloon-Safari-1.jpg',
   'Lake-Nakuru-National-Park.jpg',
   'manyata.jpg', 
   'Ol-Pejeta-Rhinos.jpg',

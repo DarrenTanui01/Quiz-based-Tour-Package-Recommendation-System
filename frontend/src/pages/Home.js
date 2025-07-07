@@ -29,6 +29,7 @@ const galleryImages = [
   'Nairobi Skyline.jpg',
   'infinity-pool.jpg',
   'Wildbeast.jpg',
+<<<<<<< HEAD
   'Lake-Naivasha_Hero-Banner_IIpng.png',
   'Samburu-National-Park.jpg',
   'Mt Kenya.jpg',
@@ -38,6 +39,9 @@ const galleryImages = [
   'Leopard.jpg',
   'Lion.jpg',
 
+=======
+  'Lake-Naivasha_Hero-Banner_IIpng.png'
+>>>>>>> 59114de4bc30582f6f8263af84c15b6b592f7589
 ];
 
 function Home() {

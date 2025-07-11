@@ -131,13 +131,27 @@ function Quiz() {
   const [showResults, setShowResults] = useState(false);
   const [recommended, setRecommended] = useState([]);
   const [detailPkg, setDetailPkg] = useState(null);
+  const [error, setError] = useState(""); 
   const theme = useTheme();
 
   const handleAnswer = (answer) => {
-    setAnswers({ ...answers, [current + 1]: answer });
+    setAnswers({ ...answers, [quizQuestions[current].id]: answer });
+    setError(""); 
   };
 
   const handleNext = () => {
+    const q = quizQuestions[current];
+    const answer = answers[q.id];
+
+    // Validation: require at least one answer
+    if (
+      (q.type === "radio" && !answer) ||
+      (q.type === "checkbox" && (!answer || answer.length === 0))
+    ) {
+      setError("Please select at least one option to continue.");
+      return;
+    }
+
     if (current < quizQuestions.length - 1) {
       setCurrent(current + 1);
     } else {
@@ -223,7 +237,9 @@ function Quiz() {
               question={quizQuestions[current]}
               value={answers[quizQuestions[current].id] || (quizQuestions[current].type === "checkbox" ? [] : "")}
               onChange={handleAnswer}
+              error={error}
             />
+            
             <div style={{ marginTop: 24, display: 'flex', justifyContent: 'center' }}>
               <Button onClick={handleBack} disabled={current === 0 && !showResults} sx={{ mr: 2 }}>
                 Back

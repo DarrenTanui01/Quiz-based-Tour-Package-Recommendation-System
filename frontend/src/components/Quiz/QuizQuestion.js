@@ -11,7 +11,7 @@ import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
 import { useTheme } from '@mui/material/styles';
 
-function QuizQuestion({ question, value, onChange }) {
+function QuizQuestion({ question, value, onChange, error }) {
   const theme = useTheme();
 
   const handleRadioChange = (event) => {
@@ -70,6 +70,11 @@ function QuizQuestion({ question, value, onChange }) {
             </FormGroup>
           )}
         </FormControl>
+        {error && (
+          <Typography color="error" sx={{ mt: 2 }}>
+            {error}
+          </Typography>
+        )}
       </CardContent>
     </Card>
   );

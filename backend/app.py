@@ -10,10 +10,10 @@ def create_app():
     db.init_app(app)
     CORS(app, supports_credentials=True)
 
-    # Initialize JWTManager
+    
     JWTManager(app)
 
-    # Register blueprints
+    
     from routes.auth import auth_bp
     from routes.quiz import quiz_bp
     from routes.packages import packages_bp

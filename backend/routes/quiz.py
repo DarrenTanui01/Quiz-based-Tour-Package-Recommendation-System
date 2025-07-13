@@ -4,7 +4,7 @@ from db import db
 
 quiz_bp = Blueprint('quiz', __name__)
 
-# Get all quiz questions with options
+
 @quiz_bp.route('/questions', methods=['GET'])
 def get_questions():
     questions = QuizQuestion.query.all()

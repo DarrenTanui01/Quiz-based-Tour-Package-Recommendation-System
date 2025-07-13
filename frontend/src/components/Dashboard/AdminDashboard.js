@@ -63,7 +63,7 @@ function AdminDashboard() {
     localStorage.removeItem('isAdmin');
   };
 
-  // Fetch users, feedbacks, and packages (requires backend endpoints)
+
   useEffect(() => {
     if (isAdmin) {
       api.get('/auth/users').then((res) => setUsers(res.data));

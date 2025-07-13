@@ -55,7 +55,7 @@ function Home() {
       ? 'linear-gradient(90deg,rgba(1, 77, 134, 0.77) 30%,rgb(251, 248, 248) 100%)'
       : 'inherit',
     transition: 'background 0.5s', }}>
-      {/* Blur overlay when popup is open */}
+      
       {popupImg && (
         <Box
           sx={{
@@ -170,7 +170,7 @@ function Home() {
         </Card>
       </Container>
 
-      {/* Horizontal scrollable image gallery */}
+      
       <Box
         sx={{
           mt: 5,

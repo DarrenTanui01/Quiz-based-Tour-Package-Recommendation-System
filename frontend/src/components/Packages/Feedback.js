@@ -37,7 +37,7 @@ function Feedback({ packageId }) {
     setLoading(true);
     try {
       await api.post('/feedback/', {
-        traveler_id: travelerId || 1, // Replace with real traveler ID from auth
+        traveler_id: travelerId || 1, 
         package_id: packageId,
         rating,
         comment

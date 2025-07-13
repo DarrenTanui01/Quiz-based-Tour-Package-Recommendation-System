@@ -20,7 +20,7 @@ def get_questions():
         })
     return jsonify(result)
 
-# Add a new quiz question
+
 @quiz_bp.route('/questions', methods=['POST'])
 def add_question():
     data = request.json
@@ -31,17 +31,17 @@ def add_question():
     )
     db.session.add(question)
     db.session.commit()
-    # Add options if provided
+    
     for opt in data.get('options', []):
         option = Option(question_id=question.id, option_text=opt)
         db.session.add(option)
     db.session.commit()
     return jsonify({'message': 'Question added'}), 201
 
-# Save a traveler's quiz answers
+
 @quiz_bp.route('/answers', methods=['POST'])
 def save_answers():
-    data = request.json  # expects {traveler_id, answers: [{question_id, option_id/input_value}]}
+    data = request.json  
     for ans in data['answers']:
         answer = TravelerAnswer(
             traveler_id=data['traveler_id'],

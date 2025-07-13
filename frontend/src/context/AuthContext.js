@@ -3,7 +3,7 @@ import React, { createContext, useState, useContext } from 'react';
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [traveler, setTraveler] = useState(null); // { id, name, email }
+  const [traveler, setTraveler] = useState(null); 
   const [token, setToken] = useState(null);
 
   const login = (travelerData, jwtToken) => {
@@ -20,7 +20,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('traveler');
   };
 
-  // On mount, restore from localStorage
+  
   React.useEffect(() => {
     const storedToken = localStorage.getItem('token');
     const storedTraveler = localStorage.getItem('traveler');

@@ -33,7 +33,7 @@ def add_feedback():
     db.session.commit()
     return jsonify({'message': 'Feedback added'}), 201
 
-# Optionally: Get all feedback (admin)
+# Get all feedback (admin)
 @feedback_bp.route('/', methods=['GET'])
 def get_all_feedback():
     feedbacks = Feedback.query.all()

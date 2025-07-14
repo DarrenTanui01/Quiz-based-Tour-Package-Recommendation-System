@@ -47,3 +47,9 @@ class Feedback(db.Model):
     rating = db.Column(db.Integer)
     comment = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+class RecommendedPackage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    traveler_id = db.Column(db.Integer, db.ForeignKey('traveler.id'))
+    package_id = db.Column(db.Integer, db.ForeignKey('tour_package.id'))
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)

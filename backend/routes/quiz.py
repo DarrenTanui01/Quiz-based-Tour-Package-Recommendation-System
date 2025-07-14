@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
-from models import QuizQuestion, Option, TravelerAnswer
+from models import QuizQuestion, Option, TravelerAnswer, TourPackage, RecommendedPackage
 from db import db
+from sqlalchemy import func
 
 quiz_bp = Blueprint('quiz', __name__)
 
@@ -52,3 +53,33 @@ def save_answers():
         db.session.add(answer)
     db.session.commit()
     return jsonify({'message': 'Answers saved'}), 201
+
+
+@quiz_bp.route('/report/most_chosen_packages', methods=['GET'])
+def most_chosen_packages():
+    results = db.session.query(
+        RecommendedPackage.package_id, func.count(RecommendedPackage.id)
+    ).group_by(RecommendedPackage.package_id).all()
+
+    packages = []
+    for pkg_id, count in results:
+        pkg = TourPackage.query.get(pkg_id)
+        if pkg:
+            packages.append({
+                'id': pkg.id,
+                'name': pkg.name,
+                'count': count
+            })
+    packages.sort(key=lambda x: x['count'], reverse=True)
+    return jsonify(packages)
+
+@quiz_bp.route('/recommendation', methods=['POST'])
+def save_recommendation():
+    data = request.json
+    rec = RecommendedPackage(
+        traveler_id=data['traveler_id'],
+        package_id=data['package_id']
+    )
+    db.session.add(rec)
+    db.session.commit()
+    return jsonify({'message': 'Recommendation saved'}), 201

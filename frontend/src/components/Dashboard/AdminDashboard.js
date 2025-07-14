@@ -35,6 +35,7 @@ function AdminDashboard() {
   const [feedbacks, setFeedbacks] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [packages, setPackages] = useState([]);
+  const [mostChosenPackages, setMostChosenPackages] = useState([]);
   const [pkgDialogOpen, setPkgDialogOpen] = useState(false);
   const [editPkg, setEditPkg] = useState(null);
   const [pkgForm, setPkgForm] = useState({
@@ -69,6 +70,7 @@ function AdminDashboard() {
       api.get('/auth/users').then((res) => setUsers(res.data));
       api.get('/feedback/').then((res) => setFeedbacks(res.data));
       api.get('/packages/').then(res => setPackages(res.data));
+      api.get('/quiz/report/most_chosen_packages').then(res => setMostChosenPackages(res.data));
     }
   }, [isAdmin, refresh]);
 
@@ -290,6 +292,37 @@ function AdminDashboard() {
             </TableContainer>
           </CardContent>
         </Card>
+        <Card sx={{ borderRadius: 4, boxShadow: 6, mb: 4, background: theme.palette.mode === 'dark'
+  ? 'linear-gradient(135deg, #232936 60%, #1976d2 100%)'
+  : 'linear-gradient(135deg, #fffbe7 60%, #ff9800 100%)', }}>
+  <CardContent>
+    <Typography variant="h6" sx={{ fontWeight: 700 }}>
+      Most Chosen Packages (Quiz Report)
+    </Typography>
+    {mostChosenPackages.length === 0 ? (
+      <Typography>No data yet.</Typography>
+    ) : (
+      <TableContainer component={Paper} sx={{ borderRadius: 3, mt: 2 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Package Name</TableCell>
+              <TableCell>Times Chosen</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {mostChosenPackages.map(pkg => (
+              <TableRow key={pkg.id}>
+                <TableCell>{pkg.name}</TableCell>
+                <TableCell>{pkg.count}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    )}
+  </CardContent>
+</Card>
       </Container>
       <Dialog open={pkgDialogOpen} onClose={handleClosePkgDialog} maxWidth="sm" fullWidth>
         <DialogTitle>{editPkg ? "Edit Package" : "Add Package"}</DialogTitle>

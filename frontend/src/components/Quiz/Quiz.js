@@ -13,6 +13,8 @@ import packages from '../data/packages';
 import PackageDetail from '../Packages/PackageDetail';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import api from '../../api';
+import { useAuth } from '../../context/AuthContext';
 
 const quizQuestions = [
   {
@@ -133,13 +135,15 @@ function Quiz() {
   const [detailPkg, setDetailPkg] = useState(null);
   const [error, setError] = useState(""); 
   const theme = useTheme();
+  const { traveler } = useAuth();
+  const travelerId = traveler?.id;
 
   const handleAnswer = (answer) => {
     setAnswers({ ...answers, [quizQuestions[current].id]: answer });
     setError(""); 
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     const q = quizQuestions[current];
     const answer = answers[q.id];
 
@@ -160,8 +164,17 @@ function Quiz() {
         .map(pkg => ({ ...pkg, score: scorePackage(pkg, answers) }))
         .sort((a, b) => b.score - a.score);
       const topScore = scored[0]?.score || 0;
-      setRecommended(scored.filter(pkg => pkg.score === topScore && topScore > 0));
-      alert("Quiz complete! Your answers:\n" + JSON.stringify(answers, null, 2));
+      const recommendedPkgs = scored.filter(pkg => pkg.score === topScore && topScore > 0);
+      setRecommended(recommendedPkgs);
+
+      // Save recommendation to backend (assuming you have travelerId available)
+      if (recommendedPkgs.length > 0 && travelerId) {
+        await api.post('/quiz/recommendation', {
+          traveler_id: travelerId,
+          package_id: recommendedPkgs[0].id
+        });
+      }
+
       setShowResults(true);
     }
   };

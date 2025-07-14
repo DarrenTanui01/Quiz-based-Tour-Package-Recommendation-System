@@ -15,6 +15,9 @@ import Paper from '@mui/material/Paper';
 import api from '../../api';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
 
 const ADMIN_CREDENTIALS = [
   { email: 'AdminDT@gmail.com', password: 'AdminDT' },
@@ -31,6 +34,13 @@ function AdminDashboard() {
   const [users, setUsers] = useState([]);
   const [feedbacks, setFeedbacks] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [packages, setPackages] = useState([]);
+  const [mostChosenPackages, setMostChosenPackages] = useState([]);
+  const [pkgDialogOpen, setPkgDialogOpen] = useState(false);
+  const [editPkg, setEditPkg] = useState(null);
+  const [pkgForm, setPkgForm] = useState({
+    name: '', description: '', estimated_cost: '', duration_days: '', season: ''
+  });
   const theme = useTheme();
 
   // Admin login handler
@@ -54,11 +64,13 @@ function AdminDashboard() {
     localStorage.removeItem('isAdmin');
   };
 
-  // Fetch users and feedbacks (requires backend endpoints)
+
   useEffect(() => {
     if (isAdmin) {
       api.get('/auth/users').then((res) => setUsers(res.data));
       api.get('/feedback/').then((res) => setFeedbacks(res.data));
+      api.get('/packages/').then(res => setPackages(res.data));
+      api.get('/quiz/report/most_chosen_packages').then(res => setMostChosenPackages(res.data));
     }
   }, [isAdmin, refresh]);
 
@@ -70,6 +82,35 @@ function AdminDashboard() {
   // Delete feedback
   const handleDeleteFeedback = (id) => {
     api.delete(`/feedback/${id}`).then(() => setRefresh((r) => !r));
+  };
+
+  // Handle open/close dialog
+  const handleOpenPkgDialog = (pkg = null) => {
+    setEditPkg(pkg);
+    setPkgForm(pkg ? { ...pkg } : { name: '', description: '', estimated_cost: '', duration_days: '', season: '' });
+    setPkgDialogOpen(true);
+  };
+  const handleClosePkgDialog = () => setPkgDialogOpen(false);
+
+  // Handle form change
+  const handlePkgFormChange = e => setPkgForm({ ...pkgForm, [e.target.name]: e.target.value });
+
+  // Create or update package
+  const handlePkgSubmit = async e => {
+    e.preventDefault();
+    if (editPkg) {
+      await api.put(`/packages/${editPkg.id}`, pkgForm);
+    } else {
+      await api.post('/packages/', pkgForm);
+    }
+    setRefresh(r => !r);
+    handleClosePkgDialog();
+  };
+
+  // Delete package
+  const handleDeletePkg = async id => {
+    await api.delete(`/packages/${id}`);
+    setRefresh(r => !r);
   };
 
   if (!isAdmin) {
@@ -212,9 +253,92 @@ function AdminDashboard() {
                 </TableBody>
               </Table>
             </TableContainer>
+            <Typography variant="h6" sx={{ mt: 2 }}>
+              Packages
+            </Typography>
+            <Button variant="contained" color="primary" sx={{ mb: 2, borderRadius: 3 }} onClick={() => handleOpenPkgDialog()}>
+              Add Package
+            </Button>
+            <TableContainer component={Paper} sx={{ borderRadius: 3, mb: 4 }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Description</TableCell>
+                    <TableCell>Cost</TableCell>
+                    <TableCell>Duration</TableCell>
+                    <TableCell>Season</TableCell>
+                    <TableCell>Actions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {packages.map(pkg => (
+                    <TableRow key={pkg.id}>
+                      <TableCell>{pkg.id}</TableCell>
+                      <TableCell>{pkg.name}</TableCell>
+                      <TableCell>{pkg.description}</TableCell>
+                      <TableCell>{pkg.estimated_cost}</TableCell>
+                      <TableCell>{pkg.duration_days}</TableCell>
+                      <TableCell>{pkg.season}</TableCell>
+                      <TableCell>
+                        <Button color="primary" onClick={() => handleOpenPkgDialog(pkg)}>Edit</Button>
+                        <Button color="error" onClick={() => handleDeletePkg(pkg.id)}>Delete</Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </CardContent>
         </Card>
+        <Card sx={{ borderRadius: 4, boxShadow: 6, mb: 4, background: theme.palette.mode === 'dark'
+  ? 'linear-gradient(135deg, #232936 60%, #1976d2 100%)'
+  : 'linear-gradient(135deg, #fffbe7 60%, #ff9800 100%)', }}>
+  <CardContent>
+    <Typography variant="h6" sx={{ fontWeight: 700 }}>
+      Most Chosen Packages (Quiz Report)
+    </Typography>
+    {mostChosenPackages.length === 0 ? (
+      <Typography>No data yet.</Typography>
+    ) : (
+      <TableContainer component={Paper} sx={{ borderRadius: 3, mt: 2 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Package Name</TableCell>
+              <TableCell>Times Chosen</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {mostChosenPackages.map(pkg => (
+              <TableRow key={pkg.id}>
+                <TableCell>{pkg.name}</TableCell>
+                <TableCell>{pkg.count}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    )}
+  </CardContent>
+</Card>
       </Container>
+      <Dialog open={pkgDialogOpen} onClose={handleClosePkgDialog} maxWidth="sm" fullWidth>
+        <DialogTitle>{editPkg ? "Edit Package" : "Add Package"}</DialogTitle>
+        <DialogContent>
+          <form onSubmit={handlePkgSubmit}>
+            <TextField label="Name" name="name" value={pkgForm.name} onChange={handlePkgFormChange} fullWidth sx={{ mb: 2 }} required />
+            <TextField label="Description" name="description" value={pkgForm.description} onChange={handlePkgFormChange} fullWidth sx={{ mb: 2 }} required />
+            <TextField label="Estimated Cost" name="estimated_cost" value={pkgForm.estimated_cost} onChange={handlePkgFormChange} fullWidth sx={{ mb: 2 }} required />
+            <TextField label="Duration (days)" name="duration_days" value={pkgForm.duration_days} onChange={handlePkgFormChange} fullWidth sx={{ mb: 2 }} required />
+            <TextField label="Season" name="season" value={pkgForm.season} onChange={handlePkgFormChange} fullWidth sx={{ mb: 2 }} required />
+            <Button type="submit" variant="contained" color="primary" sx={{ borderRadius: 3 }}>
+              {editPkg ? "Update" : "Create"}
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }

@@ -35,7 +35,7 @@ def login():
         })
     return jsonify({'message': 'Invalid credentials'}), 401
 
-# List all users (for admin)
+# List all users (for adminDashboard)
 @auth_bp.route('/users', methods=['GET'])
 def list_users():
     users = Traveler.query.all()
@@ -44,7 +44,7 @@ def list_users():
         for u in users
     ])
 
-# Delete a user (for admin)
+# Delete a user (for adminDashboard)
 @auth_bp.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     user = Traveler.query.get_or_404(user_id)

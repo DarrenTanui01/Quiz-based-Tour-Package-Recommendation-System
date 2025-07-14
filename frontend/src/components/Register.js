@@ -15,16 +15,21 @@ function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState('');
+  const [passwordStrength, setPasswordStrength] = useState(getPasswordStrength(''));
   const navigate = useNavigate();
   const theme = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMsg('');
-    
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setMsg('Please enter a valid email address.');
+      return;
+    }
+    if (passwordStrength.label === 'Weak') {
+      setMsg('Password is too weak. Please choose a stronger password.');
       return;
     }
     try {
@@ -35,6 +40,20 @@ function Register() {
       setMsg('Registration failed');
     }
   };
+
+  function getPasswordStrength(password) {
+    let score = 0;
+    if (!password) return { label: 'Weak', color: 'error.main' };
+
+    if (password.length >= 8) score++;
+    if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score++;
+    if (/\d/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+
+    if (score <= 1) return { label: 'Weak', color: 'error.main' };
+    if (score === 2) return { label: 'Good', color: 'warning.main' };
+    if (score >= 3) return { label: 'Strong', color: 'success.main' };
+  }
 
   return (
     <Box
@@ -95,10 +114,16 @@ function Register() {
                 label="Password"
                 type="password"
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={e => {
+                  setPassword(e.target.value);
+                  setPasswordStrength(getPasswordStrength(e.target.value));
+                }}
                 fullWidth
-                sx={{ mb: 2 }}
+                sx={{ mb: 1 }}
               />
+              <Typography sx={{ mb: 2, color: passwordStrength.color }}>
+                Password strength: {passwordStrength.label}
+              </Typography>
               <Button
                 type="submit"
                 variant="contained"

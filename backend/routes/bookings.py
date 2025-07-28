@@ -72,3 +72,20 @@ def book_transport():
     db.session.add(tb)
     db.session.commit()
     return jsonify({'message': 'Transport booked', 'booking_id': tb.id}), 201
+
+@bookings_bp.route('/user/<int:user_id>', methods=['GET'])
+def get_bookings_for_user(user_id):
+    bookings = Booking.query.filter_by(traveler_id=user_id).all()
+    result = []
+    for b in bookings:
+        hotel = Hotel.query.get(b.hotel_id)
+        result.append({
+            'id': b.id,
+            'hotel_name': hotel.name if hotel else '',
+            'start_date': b.start_date.strftime('%Y-%m-%d'),
+            'end_date': b.end_date.strftime('%Y-%m-%d'),
+            'payment_method': b.payment_method,
+            'payment_status': b.payment_status,
+            'amount': b.amount
+        })
+    return jsonify(result)

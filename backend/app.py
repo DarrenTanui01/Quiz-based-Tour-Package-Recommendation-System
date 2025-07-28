@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, app
 from flask_cors import CORS
 from config import Config
 from db import db
@@ -18,11 +18,15 @@ def create_app():
     from routes.quiz import quiz_bp
     from routes.packages import packages_bp
     from routes.feedback import feedback_bp
+    from routes.bookings import bookings_bp
+    from routes.mpesa import mpesa_bp
 
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(quiz_bp, url_prefix='/api/quiz')
     app.register_blueprint(packages_bp, url_prefix='/api/packages')
     app.register_blueprint(feedback_bp, url_prefix='/api/feedback')
+    app.register_blueprint(bookings_bp, url_prefix='/api/bookings')
+    app.register_blueprint(mpesa_bp, url_prefix='/api/mpesa')
 
     @app.route('/')
     def index():

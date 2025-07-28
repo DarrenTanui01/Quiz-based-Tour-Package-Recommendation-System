@@ -6,6 +6,8 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Feedback from './Feedback';
 import { useTheme } from '@mui/material/styles';
+import BookingForm from '../Bookings/BookingForm';
+import TransportBookingForm from '../Bookings/TransportBookingForm';
 
 function PackageDetail({ pkg, onBack }) {
   const theme = useTheme();
@@ -83,6 +85,8 @@ function PackageDetail({ pkg, onBack }) {
       </Card>
       {/* Feedback section */}
       <Feedback packageId={pkg.id} />
+      <BookingForm packageId={pkg.id} />
+      <TransportBookingForm packageId={pkg.id} />
     </Container>
   );
 }

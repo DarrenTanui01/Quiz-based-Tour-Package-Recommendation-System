@@ -11,6 +11,7 @@ import Quiz from './components/Quiz/Quiz';
 import PackageList from './components/Packages/PackageList';
 import PackageDetail from './components/Packages/PackageDetail';
 import NotFound from './pages/NotFound';
+import Bookings from './pages/Bookings';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/packages" element={<PackageList />} />
         <Route path="/packages/:id" element={<PackageDetail />} />
         <Route path="/home" element={<Home />} /> 
+        <Route path="/bookings" element={<Bookings />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

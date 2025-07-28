@@ -20,6 +20,19 @@ def get_hotels_for_package(package_id):
 @bookings_bp.route('/book', methods=['POST'])
 def book_hotel():
     data = request.json
+    # Prevent double-booking
+    existing = Booking.query.filter(
+        Booking.hotel_id == data['hotel_id'],
+        Booking.start_date <= parse(data['end_date']),
+        Booking.end_date >= parse(data['start_date'])
+    ).first()
+    if existing:
+        return jsonify({'error': 'Hotel already booked for these dates'}), 400
+
+    # Validate date range
+    if parse(data['end_date']) <= parse(data['start_date']):
+        return jsonify({'error': 'End date must be after start date'}), 400
+
     booking = Booking(
         traveler_id=data['traveler_id'],
         hotel_id=data['hotel_id'],

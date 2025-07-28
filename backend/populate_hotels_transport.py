@@ -76,6 +76,50 @@ with app.app_context():
             )
             db.session.add_all([t1, t2])
 
+        elif pkg.name == "Rift Valley Adrenaline Rush":
+            hotel1 = Hotel(
+                name="Sawela Lodges Naivasha",
+                location="Naivasha",
+                description="Boutique hotel near Lake Naivasha.",
+                package_id=pkg.id,
+                price_per_night=120,
+                image_url="https://example.com/sawela.jpg"
+            )
+            db.session.add(hotel1)
+            t1 = TransportOption(
+                type="van",
+                name="Private Safari Van",
+                details="Safari van from Nairobi for the trip.",
+                price=150,
+                package_id=pkg.id
+            )
+            db.session.add(t1)
+        elif pkg.name == "Nairobi & Maasai Village Immersion":
+            hotel1 = Hotel(
+                name="The King Post",
+                location="Nairobi",
+                description="Boutique hotel in Nairobi.",
+                package_id=pkg.id,
+                price_per_night=90,
+                image_url="https://example.com/kingpost.jpg"
+            )
+            hotel2 = Hotel(
+                name="Maasai Eco-camp",
+                location="Maasai Village",
+                description="Community-run Maasai homestay.",
+                package_id=pkg.id,
+                price_per_night=60,
+                image_url="https://example.com/maasai.jpg"
+            )
+            db.session.add_all([hotel1, hotel2])
+            t1 = TransportOption(
+                type="van",
+                name="Private Van",
+                details="Private van for city and village transfers.",
+                price=100,
+                package_id=pkg.id
+            )
+            db.session.add(t1)
         # Add more elif blocks for other packages as needed
 
     db.session.commit()

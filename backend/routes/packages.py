@@ -1,8 +1,10 @@
 from flask import Blueprint, request, jsonify
-from models import TourPackage
-from db import db
+from models import TourPackage, Hotel, db
 
 packages_bp = Blueprint('packages', __name__)
+hotels_bp = Blueprint('hotels', __name__)
+
+# Tour Package Routes
 
 # Get all packages
 @packages_bp.route('/', methods=['GET'])
@@ -68,3 +70,42 @@ def delete_package(package_id):
     db.session.delete(p)
     db.session.commit()
     return jsonify({'message': 'Package deleted'})
+
+# Hotel Routes
+
+@hotels_bp.route('/', methods=['GET'])
+def get_hotels():
+    hotels = Hotel.query.all()
+    return jsonify([{
+        'id': h.id,
+        'name': h.name,
+        'location': h.location,
+        'description': h.description,
+        'package_id': h.package_id,
+        'price_per_night': h.price_per_night,
+        'image_url': h.image_url
+    } for h in hotels])
+
+@hotels_bp.route('/', methods=['POST'])
+def add_hotel():
+    data = request.json
+    h = Hotel(**data)
+    db.session.add(h)
+    db.session.commit()
+    return jsonify({'message': 'Hotel added'}), 201
+
+@hotels_bp.route('/<int:hotel_id>', methods=['PUT'])
+def update_hotel(hotel_id):
+    h = Hotel.query.get_or_404(hotel_id)
+    data = request.json
+    for key, value in data.items():
+        setattr(h, key, value)
+    db.session.commit()
+    return jsonify({'message': 'Hotel updated'})
+
+@hotels_bp.route('/<int:hotel_id>', methods=['DELETE'])
+def delete_hotel(hotel_id):
+    h = Hotel.query.get_or_404(hotel_id)
+    db.session.delete(h)
+    db.session.commit()
+    return jsonify({'message': 'Hotel deleted'})

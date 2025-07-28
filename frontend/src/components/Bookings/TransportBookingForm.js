@@ -3,8 +3,10 @@ import api from '../../api';
 import { useAuth } from '../../context/AuthContext';
 import { Button, TextField, MenuItem, Card, CardContent, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useTheme } from '@mui/material/styles';
 
 function TransportBookingForm({ packageId, onBookingSuccess }) {
+  const theme = useTheme();
   const { traveler } = useAuth();
   const travelerId = traveler?.id;
   const [options, setOptions] = useState([]);
@@ -54,9 +56,17 @@ function TransportBookingForm({ packageId, onBookingSuccess }) {
   };
 
   return (
-    <Card sx={{ mb: 3 }}>
+    <Card sx={{
+      mb: 3,
+      borderRadius: 4,
+      boxShadow: 6,
+      background: theme.palette.mode === 'dark'
+        ? 'linear-gradient(135deg, #232936 60%, #1976d2 100%)'
+        : 'linear-gradient(135deg, #fffbe7 60%, #ff9800 100%)',
+      p: { xs: 2, sm: 4 }
+    }}>
       <CardContent>
-        <Typography variant="h6">Book Your Transport</Typography>
+        <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>Book Your Transport</Typography>
         <form onSubmit={handleSubmit}>
           <TextField
             select
@@ -100,7 +110,12 @@ function TransportBookingForm({ packageId, onBookingSuccess }) {
               required
             />
           )}
-          <Button type="submit" variant="contained">
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{ borderRadius: 3, mt: 2, fontWeight: 700 }}
+            fullWidth
+          >
             {amount > 0 && paymentMethod === 'mpesa'
               ? `Book Transport & Pay KES ${amount}`
               : 'Book Transport'}
